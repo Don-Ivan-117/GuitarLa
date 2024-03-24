@@ -1,0 +1,56 @@
+-------Apuntes----------
+Ademas de poder crear fragaments con <></> tambien estan las opciones de:
+    - import {Fragment} from 'react
+        - <Fragment></Fragment>
+    - import React from 'react'
+        <React.Fragment></React.Fragment>
+    Todas estas opciones al final hacen lo mismo
+---------------------------------------------------------
+No es necesario colocar ambos valores de un State. Cuando se usa la funcion modificaro se da por implicito el valor del estado:
+    - const [cart, setCart] = useState([]); //Funcion modificadora
+
+    -   function addToCart(item){
+        setCart(prevCart => [...prevCart, item]);
+    }
+    En esta funcion: 
+        - prevCart: esta tomando el lugar del estado 'cart' es decir son lo mismo solo que al usar su implicita podemos renombrarlo, dado que el modificador esta asociado a un solo estado, este se da por implicito al momento de usar un modificador.
+    Entonces : 
+        - setCart(prevCart => [...prevCart, item]);
+    Es exactamente lo mismo a:
+        - setCart(prevCart => [...cart, item]);
+
+Nota: esto solo se recomienda cuando cuando usamos el estate en otro componente con el fin de no pasar muchos props (estado y modificador), si el estado esta en el mismo componente no es ncesario.
+
+-------Use Memo-----------
+useMemo es un Hook de React que te permite guardar en caché el resultado de un cálculo entre renderizados. Utiliza dos argumentos:
+
+Este código es una implementación de useMemo en React. useMemo es un hook de React que memoriza el resultado de una función para evitar cálculos costosos en cada renderizado
+    - const isEmpty = useMemo(() => cart.length === 0, [cart]);
+
+    - () => cart.length === 0: La funcion a ejecutar
+    - [cart]: El State que dispara la funcion cada vez que se modifica. 
+
+-----CALLBACK------------
+Su una funcion que se pasa como prop a otro componente necesita de un parametro, entonces se usa un callback...
+    - onClick={() => removeFromCart(guitar.id)}
+
+-----Estado previo------
+    // Tenemo ete State
+
+    const [cart, setCart] = useState([]);
+    // prevCart: es similar a "cart" pero como tal no es exactamente lo mismo, si no que es el estado previo del estado 
+    // Con esto modificamos el estado previo el lugar de usar "cart" directamente. Al usar el estado previo es similar a una funcion de flecha
+        - setCart(prevCart => prevCart.filter(guitar => guitar.id !== id) );
+
+
+    // Si usaramos el state original en lugar del estado previo tambien funcionario pero...
+        - setCart(cart.filter(guitar => guitar.id !== id))
+    // En caso de que tuvieramos varias peticiones al mismo estado puede que la informacion se pierda al no usar el esatdo previo.
+-----------------SOBRE REACT---------------
+React es un libreria asincrona, es decir puede ejecutar multiples funciones al mismo tiempo. Por ende independientemente del orden de ejecucuion es posible 
+que algunas funciones se ejecuten incluso antes que otras que se encuentran previas. UN ejemplo son las funciones que modifican el DOM esas se ejecutan mas lentas que aquellas que no.
+Por ende es posible que se ejecute una funcion antes que otra de la cual depende, generando errores. Por eso es importante usar el UseEffect
+
+
+    
+     
